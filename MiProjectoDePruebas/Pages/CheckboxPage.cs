@@ -1,3 +1,4 @@
+
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using MiProyectoPruebas.Elements;
@@ -9,7 +10,7 @@ namespace MiProyectoPruebas
     {
         private readonly IWebDriver driver;
         private readonly WebDriverWait wait;
-        private readonly By checkboxLocator = CheckboxElements.checkboxes;
+        private readonly By checkboxLocator = CheckboxPageElements.checkboxes;
 
         public CheckboxPage(IWebDriver driver)
         {
@@ -19,13 +20,13 @@ namespace MiProyectoPruebas
 
         public bool IsChecboxesHeaderDisplayed()
         {
-            return driver.FindElement(CheckboxElements.CheckboxesHeader).Displayed;
+            return driver.FindElement(CheckboxPageElements.CheckboxesHeader).Displayed;
         }
 
         public bool IsCheckboxChecked(int index)
         {
             wait.Until(ExpectedConditions.ElementExists(checkboxLocator));
-            var checkboxes = driver.FindElements(CheckboxElements.checkboxes);
+            var checkboxes = driver.FindElements(CheckboxPageElements.checkboxes);
 
             if(index > 0 && index <= checkboxes.Count)
             {
@@ -37,7 +38,7 @@ namespace MiProyectoPruebas
         public void selectCheckboxByClicking(int index)
         {
             wait.Until(ExpectedConditions.ElementExists(checkboxLocator));
-            var checkboxSelect = driver.FindElements(CheckboxElements.checkboxes);
+            var checkboxSelect = driver.FindElements(CheckboxPageElements.checkboxes);
 
             checkboxSelect[index - 1].Click();
         }
