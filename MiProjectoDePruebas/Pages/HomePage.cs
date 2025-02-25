@@ -21,5 +21,10 @@ namespace MiProyectoPruebas.Pages
         {
             driver.FindElement(HomeElements.DropdownLink).Click();
         }
+
+        public void ClickCheckbox()
+        {
+            driver.FindElement(HomeElements.CheckboxLink).Click();
+        }
     }
 }
