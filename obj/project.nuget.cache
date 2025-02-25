@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "XZ4Y+f1Qyek=",
+  "dgSpecHash": "s4Es/HY3RjY=",
   "success": true,
   "projectFilePath": "C:\\Users\\javie\\MiProyectoPruebas\\MiProyectoPruebas.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\javie\\.nuget\\packages\\coverlet.collector\\6.0.2\\coverlet.collector.6.0.2.nupkg.sha512",
+    "C:\\Users\\javie\\.nuget\\packages\\dotnetseleniumextras.waithelpers\\3.11.0\\dotnetseleniumextras.waithelpers.3.11.0.nupkg.sha512",
     "C:\\Users\\javie\\.nuget\\packages\\microsoft.applicationinsights\\2.22.0\\microsoft.applicationinsights.2.22.0.nupkg.sha512",
     "C:\\Users\\javie\\.nuget\\packages\\microsoft.codecoverage\\17.13.0\\microsoft.codecoverage.17.13.0.nupkg.sha512",
     "C:\\Users\\javie\\.nuget\\packages\\microsoft.extensions.configuration\\9.0.2\\microsoft.extensions.configuration.9.0.2.nupkg.sha512",
@@ -29,7 +30,8 @@
     "C:\\Users\\javie\\.nuget\\packages\\nunit.analyzers\\4.4.0\\nunit.analyzers.4.4.0.nupkg.sha512",
     "C:\\Users\\javie\\.nuget\\packages\\nunit.consolerunner\\3.19.2\\nunit.consolerunner.3.19.2.nupkg.sha512",
     "C:\\Users\\javie\\.nuget\\packages\\nunit3testadapter\\5.0.0\\nunit3testadapter.5.0.0.nupkg.sha512",
-    "C:\\Users\\javie\\.nuget\\packages\\selenium.webdriver\\4.10.0\\selenium.webdriver.4.10.0.nupkg.sha512",
+    "C:\\Users\\javie\\.nuget\\packages\\selenium.support\\4.29.0\\selenium.support.4.29.0.nupkg.sha512",
+    "C:\\Users\\javie\\.nuget\\packages\\selenium.webdriver\\4.29.0\\selenium.webdriver.4.29.0.nupkg.sha512",
     "C:\\Users\\javie\\.nuget\\packages\\selenium.webdriver.chromedriver\\133.0.6943.2700-beta\\selenium.webdriver.chromedriver.133.0.6943.2700-beta.nupkg.sha512",
     "C:\\Users\\javie\\.nuget\\packages\\system.diagnostics.diagnosticsource\\5.0.0\\system.diagnostics.diagnosticsource.5.0.0.nupkg.sha512",
     "C:\\Users\\javie\\.nuget\\packages\\system.reflection.metadata\\1.6.0\\system.reflection.metadata.1.6.0.nupkg.sha512"

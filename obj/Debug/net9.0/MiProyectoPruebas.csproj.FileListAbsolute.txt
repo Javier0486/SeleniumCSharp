@@ -168,3 +168,6 @@ C:\Users\javie\MiProyectoPruebas\obj\Debug\net9.0\refint\MiProyectoPruebas.dll
 C:\Users\javie\MiProyectoPruebas\obj\Debug\net9.0\MiProyectoPruebas.pdb
 C:\Users\javie\MiProyectoPruebas\obj\Debug\net9.0\MiProyectoPruebas.genruntimeconfig.cache
 C:\Users\javie\MiProyectoPruebas\obj\Debug\net9.0\ref\MiProyectoPruebas.dll
+C:\Users\javie\MiProyectoPruebas\obj\Debug\net9.0\MiProyectoPruebas.sourcelink.json
+C:\Users\javie\MiProyectoPruebas\bin\Debug\net9.0\SeleniumExtras.WaitHelpers.dll
+C:\Users\javie\MiProyectoPruebas\bin\Debug\net9.0\WebDriver.Support.dll

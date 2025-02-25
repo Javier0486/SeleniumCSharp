@@ -16,5 +16,10 @@ namespace MiProyectoPruebas.Pages
         {
             driver.FindElement(HomeElements.DynamicContentLink).Click();
         }
+
+        public void ClickDropdown()
+        {
+            driver.FindElement(HomeElements.DropdownLink).Click();
+        }
     }
 }
