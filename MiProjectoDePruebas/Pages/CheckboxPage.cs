@@ -1,4 +1,3 @@
-
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using MiProyectoPruebas.Elements;
@@ -26,19 +25,23 @@ namespace MiProyectoPruebas
         public bool IsCheckboxChecked(int index)
         {
             wait.Until(ExpectedConditions.ElementExists(checkboxLocator));
-            var checkboxes = driver.FindElements(CheckboxPageElements.checkboxes);
+            var checkboxList = driver.FindElements(CheckboxPageElements.checkboxes);
 
-            if(index > 0 && index <= checkboxes.Count)
+            if(checkboxList.Count == 0)
             {
-                return checkboxes[index - 1].Selected;
+                throw new InvalidOperationException("No se encontraron checkboxes en la pagina");
             }
-            throw new IndexOutOfRangeException($"No hay un checkbox en la posicion {index} de checkboxes: {checkboxes.Count}");
+
+            if(index < 1 || index > checkboxList.Count)
+                throw new ArgumentOutOfRangeException(nameof(index), $"El indice {index} esta fuera del rango valido (1-{checkboxList.Count})");
+            
+            return checkboxList[index - 1].Selected;
         }
 
         public void selectCheckboxByClicking(int index)
         {
             wait.Until(ExpectedConditions.ElementExists(checkboxLocator));
-            var checkboxSelect = driver.FindElements(CheckboxPageElements.checkboxes);
+            var checkboxSelect = driver.FindElements(checkboxLocator);
 
             checkboxSelect[index - 1].Click();
         }

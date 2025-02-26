@@ -1,7 +1,5 @@
 using NUnit.Framework;
 using OpenQA.Selenium;
-using MiProyectoPruebas.Utils;
-using System.IO;
 using Microsoft.Extensions.Configuration;
 
 namespace MiProyectoPruebas.Utils
@@ -11,10 +9,9 @@ namespace MiProyectoPruebas.Utils
         protected IWebDriver driver;
         protected string baseUrl;
 
-        [SetUp]
-        public void SetUp()
+        [OneTimeSetUp] //Se ejecuta una sola vez antes de todas la pruebas de la clase
+        public void OneTimeSetUp()
         {
-            driver = DriverFactory.GetDriver();
             var projectRoot = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "MiProjectoDePruebas"));
 
             var config = new ConfigurationBuilder()
@@ -25,14 +22,30 @@ namespace MiProyectoPruebas.Utils
             baseUrl = config["TestSettings:baseUrl"] ?? throw new System.Exception("baseUrl no definido en appsettings.json");
         }
 
-        [TearDown]
+        [SetUp] //Se ejecuta antes de cada prueba
+        public void SetUp()
+        {
+            driver = DriverFactory.GetDriver(); // Obtiene una nueva instancia del WebDriver
+        }
+
+        [TearDown] //Se ejecuta despues de cada prueba
         public void TearDown()
         {
-            if (driver != null)
+            try
             {
-                driver.Quit();
-                driver.Dispose();
+                driver?.Quit();
+                driver?.Dispose();
             }
+            catch (System.Exception ex)
+            {
+                TestContext.WriteLine("Error al cerrar el driver: " + ex.Message);
+            }
+        }
+
+        [OneTimeTearDown] //Se ejecuta uan sola vez despues de todas las pruebas de la clase
+        public void OneTimeTearDown()
+        {
+            TestContext.WriteLine("Finalizando pruebas...");
         }
     }
 }

@@ -1,7 +1,5 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
-using System.Collections.Generic;
-using System.Linq;
 using MiProyectoPruebas.Elements;
 using SeleniumExtras.WaitHelpers;
 
@@ -27,37 +25,37 @@ namespace MiProyectoPruebas
 
         public bool IsDefaultOptionDisabled()
         {
-            wait.Until(ExpectedConditions.ElementExists(dropdownLocator));
-            var selectElement = new SelectElement(driver.FindElement(dropdownLocator));
+            var dropdown = wait.Until(ExpectedConditions.ElementExists(dropdownLocator));
+            var selectElement = new SelectElement(dropdown);
             var defaultOption = selectElement.Options.FirstOrDefault();
-            return defaultOption != null && defaultOption.Enabled == false;
+            return defaultOption != null && !defaultOption.Enabled;
         }
 
         public List<string> GetDropdownOptions()
         {
-            wait.Until(ExpectedConditions.ElementExists(dropdownLocator));
-            var selectElement = new SelectElement(driver.FindElement(dropdownLocator));
+            var dropdown = wait.Until(ExpectedConditions.ElementExists(dropdownLocator));
+            var selectElement = new SelectElement(dropdown);
             return selectElement.Options.Select(o => o.Text).ToList();
         }
 
         public string GetSelectedOption()
         {
-            var dropdown = driver.FindElement(dropdownLocator);
+            var dropdown = wait.Until(ExpectedConditions.ElementExists(dropdownLocator));
             var selectedOption = dropdown.FindElements(By.TagName("option"))
                                             .FirstOrDefault(option => option.Selected);
-            return selectedOption != null ? selectedOption.Text : string.Empty;
+            return selectedOption?.Text ?? string.Empty;
         }
 
         public void SelectOptionByValue(string value)
         {
-            wait.Until(ExpectedConditions.ElementToBeClickable(dropdownLocator));
-            var selectElement = new SelectElement(driver.FindElement(dropdownLocator));
-            selectElement.SelectByValue(value);
+            var dropdown = wait.Until(ExpectedConditions.ElementToBeClickable(dropdownLocator));
+            new SelectElement(dropdown).SelectByValue(value);
         }
 
         public bool IsOptionSelected(string value)
         {
-            var selectElement = new SelectElement(driver.FindElement(dropdownLocator));
+            var dropdown = wait.Until(ExpectedConditions.ElementExists(dropdownLocator));
+            var selectElement = new SelectElement(dropdown);
             return selectElement.SelectedOption.GetAttribute("value") == value;
         }
     }
