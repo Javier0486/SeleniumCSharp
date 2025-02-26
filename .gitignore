@@ -1,5 +1,28 @@
+# Archivos de configuracion y dependencias
+*.json
+!package.json #(para mantener este archivo)
+
+# Archivos temporales y de compilacion 
+*.dll
+*.pdb
+*.tmp
+*.cache
+*.html # (se agrega solo si los archivos .html generados no son necesarios en Git)
+
+# Archivos de Visual Studio y .NET
+*.nuget.cache
+*.props
+*.targets
+*.csproj.nuget.g.props
+*.csproj.FileListAbsolute.txt
+*.AssemblyInfo.cs
+*AssemblyInfoInputs.cache
+*AssemblyReference.cache
+*csproj.CoreCompileInputs.cache
+*dgspec.json
+
+# Carpetas de compilacion y salida
 bin/
 obj/
 .vs/
 TestResults/
-appsettings.json
