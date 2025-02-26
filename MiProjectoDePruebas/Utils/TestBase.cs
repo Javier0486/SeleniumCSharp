@@ -1,6 +1,8 @@
 using NUnit.Framework;
 using OpenQA.Selenium;
 using Microsoft.Extensions.Configuration;
+using AventStack.ExtentReports;
+using AventStack.ExtentReports.Reporter;
 
 namespace MiProyectoPruebas.Utils
 {
@@ -8,6 +10,8 @@ namespace MiProyectoPruebas.Utils
     {
         protected IWebDriver driver;
         protected string baseUrl;
+        protected static ExtentReports extent;
+        protected ExtentTest test;
 
         [OneTimeSetUp] //Se ejecuta una sola vez antes de todas la pruebas de la clase
         public void OneTimeSetUp()
@@ -20,17 +24,36 @@ namespace MiProyectoPruebas.Utils
                 .Build();
 
             baseUrl = config["TestSettings:baseUrl"] ?? throw new System.Exception("baseUrl no definido en appsettings.json");
+
+            //Asegura que la carpeta Report Exista antes de generar el reporte
+            string reportFolder = Path.Combine(projectRoot, "Report");
+            if (!Directory.Exists(reportFolder))
+            {
+                Directory.CreateDirectory(reportFolder);
+            }
+
+            string reportPath = Path.Combine(projectRoot, "Report", "TestReport.htm");
+
+            var htmlReporter = new ExtentSparkReporter(reportPath);
+            extent = new ExtentReports();
+            extent.AttachReporter(htmlReporter);
         }
 
         [SetUp] //Se ejecuta antes de cada prueba
         public void SetUp()
         {
             driver = DriverFactory.GetDriver(); // Obtiene una nueva instancia del WebDriver
+            test = extent.CreateTest(TestContext.CurrentContext.Test.Name);
         }
 
         [TearDown] //Se ejecuta despues de cada prueba
         public void TearDown()
         {
+            if (TestContext.CurrentContext.Result.Outcome.Status == NUnit.Framework.Interfaces.TestStatus.Failed)
+                test.Fail("Test Failed");
+            else
+                test.Pass("Test Passed");
+
             try
             {
                 driver?.Quit();
@@ -38,14 +61,25 @@ namespace MiProyectoPruebas.Utils
             }
             catch (System.Exception ex)
             {
-                TestContext.WriteLine("Error al cerrar el driver: " + ex.Message);
+                TestContext.Progress.WriteLine("Error al cerrar el driver: " + ex.Message);
             }
         }
 
         [OneTimeTearDown] //Se ejecuta uan sola vez despues de todas las pruebas de la clase
         public void OneTimeTearDown()
         {
-            TestContext.WriteLine("Finalizando pruebas...");
+            TestContext.Progress.WriteLine("Finalizando pruebas...");
+            
+            if (extent != null)
+            {
+                TestContext.Progress.WriteLine("Generando reporte...");
+                extent.Flush();
+                TestContext.Progress.WriteLine("Reporte generado con exito...");
+            }
+            else
+            {
+                TestContext.Progress.WriteLine("Error: ExtentReports no fue inicializado");
+            }
         }
     }
 }
