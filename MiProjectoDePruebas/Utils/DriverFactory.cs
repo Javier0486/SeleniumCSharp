@@ -5,7 +5,7 @@ namespace MiProyectoPruebas.Utils
 {
     public class DriverFactory
     {
-        private static IWebDriver driver;
+        private static IWebDriver? driver;
 
         public static IWebDriver GetDriver()
         {
