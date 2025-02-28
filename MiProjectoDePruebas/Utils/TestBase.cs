@@ -12,13 +12,14 @@ namespace MiProyectoPruebas.Utils
         protected string baseUrl;
         protected static ExtentReports extent;
         protected ExtentTest test;
+        protected IConfiguration config;
 
         [OneTimeSetUp] //Se ejecuta una sola vez antes de todas la pruebas de la clase
         public void OneTimeSetUp()
         {
             var projectRoot = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "MiProjectoDePruebas"));
 
-            var config = new ConfigurationBuilder()
+            config = new ConfigurationBuilder()
                 .SetBasePath(Path.Combine(projectRoot, "Config"))
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
@@ -79,6 +80,28 @@ namespace MiProyectoPruebas.Utils
             else
             {
                 TestContext.Progress.WriteLine("Error: ExtentReports no fue inicializado");
+            }
+        }
+
+        public string TakeScreenshot(string testName)
+        {
+            try
+            {
+                Screenshot screenshot = ((ITakesScreenshot)driver).GetScreenshot();
+                string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+                string screenshotPath = Path.Combine(Directory.GetCurrentDirectory(), "Screenshots", $"{testName}_{timestamp}.png");
+
+                //Asegurar que la carpeta de screenshots exista
+                Directory.CreateDirectory(screenshotPath);
+
+                screenshot.SaveAsFile(screenshotPath);
+                
+                return screenshotPath;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error tomando la captura de pantalla: " + e.Message);
+                return null;
             }
         }
     }
