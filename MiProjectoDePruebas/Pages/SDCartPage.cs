@@ -3,26 +3,23 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using MiProyectoPruebas.Elements;
 using SeleniumExtras.WaitHelpers;
+using MiProyectoPruebas.Framework;
 
 namespace MiProyectoPruebas
 {
-    public class SDCartPage
+    public class SDCartPage : BasePage
     {
-        private readonly IWebDriver driver;
-        private readonly WebDriverWait wait;
         private readonly IConfiguration config;
 
-        public SDCartPage(IWebDriver driver, IConfiguration config)
+        public SDCartPage(IWebDriver driver, IConfiguration config) : base(driver)
         {
-            this.driver = driver;
-            this.wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
             this.config = config;
         }
 
-        public IWebElement productPriceInCartLocator(string productName)
+        public IWebElement ProductPriceInCartLocator(string productName)
         {
             string dynamicXPath = $"//div[normalize-space(text())='{productName}']/ancestor::div[@class='cart_item_label']//div[@class='inventory_item_price']";
-            return driver.FindElement(By.XPath(dynamicXPath));
+            return FindElement(By.XPath(dynamicXPath)); // Modification: Use of BasePage method
         }
 
         public bool isPriceDisplayed(string[] products, List<string> pricesFromHomepage)
@@ -30,7 +27,7 @@ namespace MiProyectoPruebas
             for (int i=0; i<products.Length; i++)
             {
                 // localize the price in the cart based in the product name
-                var priceElementInCart = productPriceInCartLocator(products[i]);
+                var priceElementInCart = ProductPriceInCartLocator(products[i]);
                 //verify if the price text in the cart is equal to the price in the homepage
                 if(priceElementInCart.Text.Trim() != pricesFromHomepage[i].Trim())
                 {

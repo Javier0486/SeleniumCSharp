@@ -3,6 +3,8 @@ using OpenQA.Selenium;
 using Microsoft.Extensions.Configuration;
 using AventStack.ExtentReports;
 using AventStack.ExtentReports.Reporter;
+using System.IO;
+using MongoDB.Driver.Core.Misc;
 
 namespace MiProyectoPruebas.Utils
 {
@@ -19,6 +21,7 @@ namespace MiProyectoPruebas.Utils
         {
             var projectRoot = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "MiProjectoDePruebas"));
 
+            // Configuration
             config = new ConfigurationBuilder()
                 .SetBasePath(Path.Combine(projectRoot, "Config"))
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
@@ -27,13 +30,9 @@ namespace MiProyectoPruebas.Utils
             baseUrl = config["TestSettings:baseUrl"] ?? throw new System.Exception("baseUrl no definido en appsettings.json");
 
             //Asegura que la carpeta Report Exista antes de generar el reporte
-            string reportFolder = Path.Combine(projectRoot, "Report");
-            if (!Directory.Exists(reportFolder))
-            {
-                Directory.CreateDirectory(reportFolder);
-            }
-
-            string reportPath = Path.Combine(projectRoot, "Report", "TestReport.htm");
+            string reportFolder = EnsureDirectoryExists(Path.Combine(projectRoot, "Report"));
+            
+            string reportPath = Path.Combine(reportFolder, "TestReport.htm");
 
             var htmlReporter = new ExtentSparkReporter(reportPath);
             extent = new ExtentReports();
@@ -60,7 +59,7 @@ namespace MiProyectoPruebas.Utils
                 driver?.Quit();
                 driver?.Dispose();
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 TestContext.Progress.WriteLine("Error al cerrar el driver: " + ex.Message);
             }
@@ -72,15 +71,13 @@ namespace MiProyectoPruebas.Utils
             TestContext.Progress.WriteLine("Finalizando pruebas...");
             
             if (extent != null)
-            {
-                TestContext.Progress.WriteLine("Generando reporte...");
-                extent.Flush();
-                TestContext.Progress.WriteLine("Reporte generado con exito...");
-            }
-            else
-            {
-                TestContext.Progress.WriteLine("Error: ExtentReports no fue inicializado");
-            }
+                {
+                    extent.Flush();
+                }   
+                else
+                {
+                    TestContext.Progress.WriteLine("Error: ExtentReports was not initialized");
+                }
         }
 
         public string TakeScreenshot(string testName)
@@ -89,10 +86,8 @@ namespace MiProyectoPruebas.Utils
             {
                 Screenshot screenshot = ((ITakesScreenshot)driver).GetScreenshot();
                 string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-                string screenshotPath = Path.Combine(Directory.GetCurrentDirectory(), "Screenshots", $"{testName}_{timestamp}.png");
-
-                //Asegurar que la carpeta de screenshots exista
-                Directory.CreateDirectory(screenshotPath);
+                string screenshotFolder = EnsureDirectoryExists(Path.Combine(Directory.GetCurrentDirectory(), "Screenshots"));
+                string screenshotPath = Path.Combine(screenshotFolder, $"{testName}_{timestamp}.png");
 
                 screenshot.SaveAsFile(screenshotPath);
                 
@@ -100,9 +95,18 @@ namespace MiProyectoPruebas.Utils
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error tomando la captura de pantalla: " + e.Message);
+                TestContext.Progress.WriteLine("Error from screenshot: " + e.Message);
                 return null;
             }
+        }
+
+        private string EnsureDirectoryExists(string directoryPath)
+        {
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+            return directoryPath;
         }
     }
 }
