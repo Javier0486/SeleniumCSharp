@@ -1,9 +1,5 @@
 using NUnit.Framework;
-using OpenQA.Selenium;
 using MiProyectoPruebas.Utils;
-using MiProyectoPruebas.Elements;
-using SeleniumExtras.WaitHelpers;
-using OpenQA.Selenium.Support.UI;
 using SwagLabsHomepageEnum.Utils;
 
 namespace MiProyectoPruebas.Tests
@@ -13,7 +9,6 @@ namespace MiProyectoPruebas.Tests
         private SDLoginPage sDLoginPage;
         private SDHomePage sDHomePage;
         private SDCartPage sDCartPage;
-        private WebDriverWait wait;
 
         [SetUp]
         public void TestSetup()
@@ -22,7 +17,6 @@ namespace MiProyectoPruebas.Tests
             sDLoginPage = new SDLoginPage(driver, config);
             sDCartPage = new SDCartPage(driver, config);
             sDHomePage = new SDHomePage(driver, config);
-            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
         }
 
         [Test]
@@ -31,7 +25,7 @@ namespace MiProyectoPruebas.Tests
             string username = config["TestSettings:standardUser"] ?? throw new Exception("standardUser not defined");
             string password = config["TestSettings:password"] ?? throw new Exception("password not defined");
 
-            sDLoginPage.LoginTo(username, password);
+            sDLoginPage.Login(username, password);
 
             string[] products = new string[]
             {
@@ -40,10 +34,10 @@ namespace MiProyectoPruebas.Tests
             };
             List<string> productPrices = sDHomePage.GetPricesFromHomepage(products);
 
-            sDHomePage.selectProducts(products);
-            sDHomePage.clickCartIcon();
+            sDHomePage.SelectProducts(products);
+            sDHomePage.ClickCartIcon();
 
-            Assert.That(sDCartPage.isPriceDisplayed(products, productPrices), $"Not all the prices match. Products: {string.Join(", ", products)}, Expected Prices: {string.Join(", ", productPrices)}");
+            Assert.That(sDCartPage.isPriceDisplayed(products, productPrices), $"Some product prices in the cart do not match. Products: {string.Join(", ", products)}, Expected Prices: {string.Join(", ", productPrices)}");
         }
     }
 }

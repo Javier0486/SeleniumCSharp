@@ -1,40 +1,40 @@
 using NUnit.Framework;
-using OpenQA.Selenium;
-using MiProyectoPruebas.Utils;
 using MiProyectoPruebas.Elements;
-using SeleniumExtras.WaitHelpers;
-using OpenQA.Selenium.Support.UI;
+using MiProyectoPruebas.Utils;
+using MiProyectoPruebas.Pages;
 
 namespace MiProyectoPruebas.Tests
 {
     public class SDLoginBlockedUserTest : TestBase
-    {
-        private SDLoginPage sdLoginPage;
-        private readonly WebDriverWait wait;
-        
+    {   
+        private SDLoginPage sDLoginPage;
+
         [SetUp]
         public void TestSetup()
         {
             driver.Navigate().GoToUrl(baseUrl);
-            sdLoginPage = new SDLoginPage(driver, config);
+            sDLoginPage = new SDLoginPage(driver, config);
         }
 
         [Test]
         public void VerifyLoginFailAnPass()
         {
+            //data from config
             string usernamelocked = config["TestSettings:lockOutUser"] ?? throw new Exception("lockOutUser no definido en appsettings.json");
-            string password = config["TestSettings:password"];
+            string password = config["TestSettings:password"] ?? throw new Exception("password not defined");
             string username = config["TestSettings:standardUser"] ?? throw new Exception("standarUser no definido");
 
-            sdLoginPage.LoginTo(usernamelocked, password);
-            Assert.That(sdLoginPage.VerifyLoginWithLockedOutUser(), Is.True, "El mensaje de usuario bloqueado no es visible");
+            // login locked user
+            sDLoginPage.Login(usernamelocked, password);
+            Assert.That(sDLoginPage.VerifyLoginWithLockedOutUser(), Is.True, "locked user message is not displayed");
 
-            sdLoginPage.ClearInputs();
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(2));
-
-            sdLoginPage.LoginTo(username, password);
-            var header = wait.Until(ExpectedConditions.ElementExists(SDHomePageElements.SwagLabsHeader));
-            Assert.That(header.Displayed);
+            // clean fields
+            sDLoginPage.ClearInputs();
+            
+            // login valid user
+            sDLoginPage.Login(username, password);
+            var header = sDLoginPage.WaitForHeader(SDHomePageElements.SwagLabsHeader);
+            Assert.That(header.Displayed, "the SwagLabs header is not displayed after successful login");
         }
     }
 }

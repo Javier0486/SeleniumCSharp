@@ -3,42 +3,43 @@ using OpenQA.Selenium.Support.UI;
 using MiProyectoPruebas.Elements;
 using SeleniumExtras.WaitHelpers;
 using Microsoft.Extensions.Configuration;
+using MiProyectoPruebas.Framework;
 
 namespace MiProyectoPruebas
 {
-    public class SDLoginPage
+    public class SDLoginPage : BasePage // Modification: Inherit from BasePage
     {
-        private readonly IWebDriver driver;
-        private readonly WebDriverWait wait;
-        private readonly IConfiguration config;
+        private readonly IConfiguration config; 
 
-        public SDLoginPage(IWebDriver driver, IConfiguration config)
+        public SDLoginPage(IWebDriver driver, IConfiguration config) : base(driver) // Modification: constructor updated
         {
-            this.driver = driver;
-            this.wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
             this.config = config;
         }
 
-        public void LoginTo(string user, string password)
+        public void Login(string user, string password)
         {
-            driver.FindElement(SDLoginPageElements.usernameIput).SendKeys(user);
-            driver.FindElement(SDLoginPageElements.passwordInput).Clear();//se agrego ya que aunque se ejecute la funcion ClearInputs, cuando vuelve a escribir el password aparece dos veces, con esta linea nos aseguramos que cuando vuelva a escribir el password el input este limpio
-            driver.FindElement(SDLoginPageElements.passwordInput).SendKeys(password);
-            driver.FindElement(SDLoginPageElements.loginButton).Click(); 
+            // Modification: Use of BasePage method
+            EnterText(SDLoginPageElements.UsernameIput, user);
+            ClearField(SDLoginPageElements.PasswordInput);
+            EnterText(SDLoginPageElements.PasswordInput, password);
+            Click(SDLoginPageElements.LoginButton);
+
         }
 
         public bool VerifyLoginWithLockedOutUser()
         {
-            return driver.FindElement(SDLoginPageElements.lockedUserMessage).Displayed;
+            return IsElementDisplayed(SDLoginPageElements.LockedUserMessage);
         }
 
-        public void ClearInputs()
+        public void ClearInputs() // New method to clear input fields
         {
-            var usernameElement = driver.FindElement(SDLoginPageElements.usernameIput);
-            var passwordElement = driver.FindElement(SDLoginPageElements.passwordInput);
+            ClearField(SDLoginPageElements.UsernameIput);
+            ClearField(SDLoginPageElements.PasswordInput);
+        }
 
-            usernameElement.Clear();
-            passwordElement.Clear();
-            }
+        public IWebElement WaitForHeader(By locator)
+        {
+            return WaitUntilElementExist(locator);
+        }
     }
 }
