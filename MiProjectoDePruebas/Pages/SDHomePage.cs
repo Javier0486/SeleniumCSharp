@@ -1,9 +1,8 @@
 using Microsoft.Extensions.Configuration;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
 using MiProyectoPruebas.Elements;
-using SeleniumExtras.WaitHelpers;
 using MiProyectoPruebas.Framework;
+using MiProyectoPruebas.Utils;
 
 namespace MiProyectoPruebas
 {
@@ -51,7 +50,7 @@ namespace MiProyectoPruebas
             {
                 var priceElement = GetProductPriceLocator(productName);
                 listPrices.Add(priceElement.Text);
-                Console.WriteLine(priceElement);
+                Logger.LogAction($"{priceElement}");
             }
             return listPrices;
         }

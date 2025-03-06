@@ -1,6 +1,4 @@
 using Microsoft.Extensions.Configuration;
-using System;
-using System.IO;
 
 namespace MiProyectoPruebas.Utils
 {
@@ -29,12 +27,12 @@ namespace MiProyectoPruebas.Utils
             }
             catch (FileNotFoundException fnfEx)
             {
-                Console.WriteLine(fnfEx.Message);
+                Logger.LogAction($"{fnfEx.Message}");
                 throw new Exception("Error al cargar appsettings.json. Verifica que el archivo exista y tenga el formato correcto.", fnfEx);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Logger.LogAction($"{ex.Message}");
                 throw new Exception("Error al cargar appsettings.json. Verifica que el archivo tenga el formato correcto.", ex);
             }
         }

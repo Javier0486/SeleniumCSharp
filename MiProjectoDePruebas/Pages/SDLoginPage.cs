@@ -1,7 +1,5 @@
 using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
 using MiProyectoPruebas.Elements;
-using SeleniumExtras.WaitHelpers;
 using Microsoft.Extensions.Configuration;
 using MiProyectoPruebas.Framework;
 
@@ -25,6 +23,7 @@ namespace MiProyectoPruebas
             Click(SDLoginPageElements.LoginButton);
 
         }
+
 
         public bool VerifyLoginWithLockedOutUser()
         {
