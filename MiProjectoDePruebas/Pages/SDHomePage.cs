@@ -54,5 +54,17 @@ namespace MiProyectoPruebas
             }
             return listPrices;
         }
+
+        public bool LogoutFromSite()
+        {
+            Click(SDHomePageElements.BurgerMenu);
+            Click(SDHomePageElements.LogoutOption);
+            if (FindElement(SDLoginPageElements.UsernameIput).Displayed)
+            {
+                return true;
+            }
+            else
+                return false;
+        }
     }
 }
