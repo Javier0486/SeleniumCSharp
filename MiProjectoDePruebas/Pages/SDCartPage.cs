@@ -1,9 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
-using MiProyectoPruebas.Elements;
-using SeleniumExtras.WaitHelpers;
 using MiProyectoPruebas.Framework;
+using MiProyectoPruebas.Utils;
 
 namespace MiProyectoPruebas
 {
@@ -31,7 +29,7 @@ namespace MiProyectoPruebas
                 //verify if the price text in the cart is equal to the price in the homepage
                 if(priceElementInCart.Text.Trim() != pricesFromHomepage[i].Trim())
                 {
-                    Console.WriteLine($"the price of the product '{products[i]}' doesn't match: " + $"Homepage: {pricesFromHomepage}, CartPage: {priceElementInCart.Text}");
+                    Logger.LogAction($"the price of the product '{products[i]}' doesn't match: " + $"Homepage: {pricesFromHomepage}, CartPage: {priceElementInCart.Text}");
                     return false; //if any price doesn't match, return false
                 }
             }

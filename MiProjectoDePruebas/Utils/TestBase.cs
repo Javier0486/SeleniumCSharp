@@ -3,8 +3,6 @@ using OpenQA.Selenium;
 using Microsoft.Extensions.Configuration;
 using AventStack.ExtentReports;
 using AventStack.ExtentReports.Reporter;
-using System.IO;
-using MongoDB.Driver.Core.Misc;
 
 namespace MiProyectoPruebas.Utils
 {
@@ -15,6 +13,11 @@ namespace MiProyectoPruebas.Utils
         protected static ExtentReports extent;
         protected ExtentTest test;
         protected IConfiguration config;
+
+        // classes page properties
+        protected SDLoginPage SDLoginPage => new SDLoginPage(driver, config);
+        protected SDHomePage SDHomePage => new SDHomePage(driver, config);
+        protected SDCartPage SDCartPage => new SDCartPage(driver, config);
 
         [OneTimeSetUp] //Se ejecuta una sola vez antes de todas la pruebas de la clase
         public void OneTimeSetUp()
@@ -42,6 +45,7 @@ namespace MiProyectoPruebas.Utils
         [SetUp] //Se ejecuta antes de cada prueba
         public void SetUp()
         {
+            Logger.LogAction("Initializing driver");
             driver = DriverFactory.GetDriver(); // Obtiene una nueva instancia del WebDriver
             test = extent.CreateTest(TestContext.CurrentContext.Test.Name);
         }
@@ -56,6 +60,7 @@ namespace MiProyectoPruebas.Utils
 
             try
             {
+                Logger.LogAction("Ending script and closing driver");
                 driver?.Quit();
                 driver?.Dispose();
             }
