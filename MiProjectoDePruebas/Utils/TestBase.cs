@@ -3,6 +3,7 @@ using OpenQA.Selenium;
 using Microsoft.Extensions.Configuration;
 using AventStack.ExtentReports;
 using AventStack.ExtentReports.Reporter;
+using MiProyectoPruebas.Utils;
 
 namespace MiProyectoPruebas.Utils
 {
@@ -33,13 +34,8 @@ namespace MiProyectoPruebas.Utils
             baseUrl = config["TestSettings:baseUrl"] ?? throw new System.Exception("baseUrl no definido en appsettings.json");
 
             //Asegura que la carpeta Report Exista antes de generar el reporte
-            string reportFolder = EnsureDirectoryExists(Path.Combine(projectRoot, "Report"));
-            
-            string reportPath = Path.Combine(reportFolder, "TestReport.htm");
-
-            var htmlReporter = new ExtentSparkReporter(reportPath);
-            extent = new ExtentReports();
-            extent.AttachReporter(htmlReporter);
+            var reportPath = Path.Combine(projectRoot, "Report", "TestReport.html");
+            extent = ReportManager.CreateReport(reportPath);
         }
 
         [SetUp] //Se ejecuta antes de cada prueba
@@ -55,6 +51,13 @@ namespace MiProyectoPruebas.Utils
         {
             if (TestContext.CurrentContext.Result.Outcome.Status == NUnit.Framework.Interfaces.TestStatus.Failed)
                 test.Fail("Test Failed");
+
+                // taking screenshot if failed
+                string screenshotPath = ScreenshotManager.TakeScreenshot(driver, TestContext.CurrentContext.Test.Name);
+                if (!string.IsNullOrEmpty(screenshotPath))
+                {
+                    test.AddScreenCaptureFromPath(screenshotPath);
+                }
             else
                 test.Pass("Test Passed");
 
@@ -79,39 +82,10 @@ namespace MiProyectoPruebas.Utils
                 {
                     extent.Flush();
                 }   
-                else
-                {
-                    TestContext.Progress.WriteLine("Error: ExtentReports was not initialized");
-                }
-        }
-
-        public string TakeScreenshot(string testName)
-        {
-            try
+            else
             {
-                Screenshot screenshot = ((ITakesScreenshot)driver).GetScreenshot();
-                string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-                string screenshotFolder = EnsureDirectoryExists(Path.Combine(Directory.GetCurrentDirectory(), "Screenshots"));
-                string screenshotPath = Path.Combine(screenshotFolder, $"{testName}_{timestamp}.png");
-
-                screenshot.SaveAsFile(screenshotPath);
-                
-                return screenshotPath;
+                TestContext.Progress.WriteLine("Error: ExtentReports was not initialized");
             }
-            catch (Exception e)
-            {
-                TestContext.Progress.WriteLine("Error from screenshot: " + e.Message);
-                return null;
-            }
-        }
-
-        private string EnsureDirectoryExists(string directoryPath)
-        {
-            if (!Directory.Exists(directoryPath))
-            {
-                Directory.CreateDirectory(directoryPath);
-            }
-            return directoryPath;
         }
     }
 }
