@@ -1,18 +1,12 @@
 using OpenQA.Selenium;
 using MiProyectoPruebas.Elements;
-using Microsoft.Extensions.Configuration;
 using MiProyectoPruebas.Framework;
 
 namespace MiProyectoPruebas
 {
-    public class SDLoginPage : BasePage // Modification: Inherit from BasePage
+    public class SDLoginPage : BasePage // Inherit from BasePage
     {
-        private readonly IConfiguration config; 
-
-        public SDLoginPage(IWebDriver driver, IConfiguration config) : base(driver) // Modification: constructor updated
-        {
-            this.config = config;
-        }
+        public SDLoginPage(IWebDriver driver) : base(driver) {}
 
         public void Login(string user, string password)
         {

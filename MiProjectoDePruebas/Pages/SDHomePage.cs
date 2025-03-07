@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Configuration;
 using OpenQA.Selenium;
 using MiProyectoPruebas.Elements;
 using MiProyectoPruebas.Framework;
@@ -8,12 +7,7 @@ namespace MiProyectoPruebas
 {
     public class SDHomePage : BasePage
     {
-        private readonly IConfiguration config;
-
-        public SDHomePage(IWebDriver driver, IConfiguration config) : base(driver)
-        {
-            this.config = config;
-        }
+        public SDHomePage(IWebDriver driver) : base(driver) { }
 
         public IWebElement GetProductPriceLocator(string productName)
         {
@@ -38,7 +32,6 @@ namespace MiProyectoPruebas
             foreach (var productName in products)
             {
                 var addToCartButton = GetAddToCartButtonLocator(productName);
-
                 addToCartButton.Click();
             }
         }
@@ -59,12 +52,7 @@ namespace MiProyectoPruebas
         {
             Click(SDHomePageElements.BurgerMenu);
             Click(SDHomePageElements.LogoutOption);
-            if (FindElement(SDLoginPageElements.UsernameIput).Displayed)
-            {
-                return true;
-            }
-            else
-                return false;
+            return IsElementDisplayed(SDLoginPageElements.UsernameIput);
         }
     }
 }

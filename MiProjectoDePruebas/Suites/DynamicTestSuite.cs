@@ -7,25 +7,47 @@ namespace MiProyectoPruebas.Suites
     [Category("DynamicSuite")]
     public class DynamicIDTestSuite
     {
-        private DynamicIDTest dynamicIDTest;
+        private SDLogoutTest sdLogoutTest;
+        private SDLoginBlockedUserTest sdLoginBlockedUserTest;
+        private SDPriceProductsCartTest sdPriceProductsCartTest;
 
         [SetUp]
         public void SetUp()
         {
-            dynamicIDTest = new DynamicIDTest();
-            dynamicIDTest.SetUp();
+            sdLogoutTest = new SDLogoutTest();
+            sdLogoutTest.SetUp();
+
+            sdLoginBlockedUserTest = new SDLoginBlockedUserTest();
+            sdLoginBlockedUserTest.SetUp();
+
+            sdPriceProductsCartTest = new SDPriceProductsCartTest();
+            sdPriceProductsCartTest.SetUp();
         }
 
         [Test]
-        public void RunDynamicIDTest()
+        public void RunVerifyLogoutTest()
         {
-            dynamicIDTest.VerifyDynamicHeaderIsDisplayed();
+            sdLogoutTest.VerifyLogout();
+        }
+
+        [Test]
+        public void RunVerifyLoginFailAnPassTest()
+        {
+            sdLoginBlockedUserTest.VerifyLoginFailAnPass();
+        }
+
+        [Test]
+        public void RunVerifyProductPricesInCartTest()
+        {
+            sdPriceProductsCartTest.VerifyProductPricesInCart();
         }
 
         [TearDown]
         public void TearDown()
         {
-            dynamicIDTest.TearDown();
+            sdLogoutTest.TearDown();
+            sdLoginBlockedUserTest.TearDown();
+            sdPriceProductsCartTest.TearDown();
         }
     }
 }

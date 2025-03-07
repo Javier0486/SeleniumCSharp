@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Configuration;
 using OpenQA.Selenium;
 using MiProyectoPruebas.Framework;
 using MiProyectoPruebas.Utils;
@@ -7,12 +6,7 @@ namespace MiProyectoPruebas
 {
     public class SDCartPage : BasePage
     {
-        private readonly IConfiguration config;
-
-        public SDCartPage(IWebDriver driver, IConfiguration config) : base(driver)
-        {
-            this.config = config;
-        }
+        public SDCartPage(IWebDriver driver) : base(driver) {}
 
         public IWebElement ProductPriceInCartLocator(string productName)
         {

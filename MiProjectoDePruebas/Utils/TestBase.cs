@@ -2,7 +2,6 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using Microsoft.Extensions.Configuration;
 using AventStack.ExtentReports;
-using AventStack.ExtentReports.Reporter;
 using MiProyectoPruebas.Utils;
 
 namespace MiProyectoPruebas.Utils
@@ -16,9 +15,9 @@ namespace MiProyectoPruebas.Utils
         protected IConfiguration config;
 
         // classes page properties
-        protected SDLoginPage SDLoginPage => new SDLoginPage(driver, config);
-        protected SDHomePage SDHomePage => new SDHomePage(driver, config);
-        protected SDCartPage SDCartPage => new SDCartPage(driver, config);
+        protected SDLoginPage SDLoginPage => new SDLoginPage(driver);
+        protected SDHomePage SDHomePage => new SDHomePage(driver);
+        protected SDCartPage SDCartPage => new SDCartPage(driver);
 
         [OneTimeSetUp] //Se ejecuta una sola vez antes de todas la pruebas de la clase
         public void OneTimeSetUp()
@@ -41,7 +40,7 @@ namespace MiProyectoPruebas.Utils
         [SetUp] //Se ejecuta antes de cada prueba
         public void SetUp()
         {
-            Logger.LogAction("Initializing driver");
+            Logger.LogAction("Initializing driver...");
             driver = DriverFactory.GetDriver(); // Obtiene una nueva instancia del WebDriver
             test = extent.CreateTest(TestContext.CurrentContext.Test.Name);
         }
@@ -79,9 +78,9 @@ namespace MiProyectoPruebas.Utils
             TestContext.Progress.WriteLine("Finalizando pruebas...");
             
             if (extent != null)
-                {
-                    extent.Flush();
-                }   
+            {
+                extent.Flush();
+            }   
             else
             {
                 TestContext.Progress.WriteLine("Error: ExtentReports was not initialized");
