@@ -1,6 +1,7 @@
 using OpenQA.Selenium;
 using MiProyectoPruebas.Framework;
 using MiProyectoPruebas.Utils;
+using MiProyectoPruebas.Elements;
 
 namespace MiProyectoPruebas
 {
@@ -12,6 +13,12 @@ namespace MiProyectoPruebas
         {
             string dynamicXPath = $"//div[normalize-space(text())='{productName}']/ancestor::div[@class='cart_item_label']//div[@class='inventory_item_price']";
             return FindElement(By.XPath(dynamicXPath)); // Modification: Use of BasePage method
+        }
+
+        public By ProductInCartLocator(string productName)
+        {
+            string dynamicXPath = $"//div[normalize-space(text())='{productName}']";
+            return By.XPath(dynamicXPath); // Use of BasePage method
         }
 
         public bool isPriceDisplayed(string[] products, List<string> pricesFromHomepage)
@@ -31,5 +38,28 @@ namespace MiProyectoPruebas
             //if all elements where found, return true
             return true;
         }
+
+        public bool isProductDisplayedInCart(string[] products)
+        {
+            for (int i=0; i<products.Length; i++)
+            {
+                // localize the product in the cart based in the product name
+                var productElementInCart = ProductInCartLocator(products[i]);
+                //verify if the product is displayed in the cart
+                if(!IsElementDisplayed(productElementInCart))
+                {
+                    Logger.LogAction($"the product '{products[i]}' is not displayed in the cart");
+                    return false; //if any product is not displayed, return false
+                }
+            }
+
+            return true;
+        }
+
+        public void Checkout()
+        {
+            Click(SDCartElements.CheckoutButton);
+        }
+
     }
 }
