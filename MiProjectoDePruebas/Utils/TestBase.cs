@@ -18,6 +18,9 @@ namespace MiProyectoPruebas.Utils
         protected SDLoginPage SDLoginPage => new SDLoginPage(driver);
         protected SDHomePage SDHomePage => new SDHomePage(driver);
         protected SDCartPage SDCartPage => new SDCartPage(driver);
+        protected SDCheckoutYourInfoPage SDCheckoutYourInfoPage => new SDCheckoutYourInfoPage(driver);
+        protected SDCheckoutOverviewPage SDCheckoutOverviewPage => new SDCheckoutOverviewPage(driver);
+        protected SDCheckoutCompletePage SDCheckoutCompletePage => new SDCheckoutCompletePage(driver);
 
         [OneTimeSetUp] //Se ejecuta una sola vez antes de todas la pruebas de la clase
         public void OneTimeSetUp()
