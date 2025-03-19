@@ -28,8 +28,8 @@ namespace MiProyectoPruebas.Tests
 
             string[] products = new string[]
             {
-                ProductsInHomepage.Products["backPAck"], 
-                ProductsInHomepage.Products["onesie"]
+                ProductsInHomepage.Backpack.GetProduct(), 
+                ProductsInHomepage.Onesie.GetProduct()
             };
             Logger.LogAction($"Selecting products: {string.Join(", ", products)}");
             SDHomePage.SelectProducts(products);
