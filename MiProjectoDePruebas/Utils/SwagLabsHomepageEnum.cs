@@ -2,16 +2,31 @@ using System.Collections;
 
 namespace SwagLabsHomepageEnum.Utils
 {
-    public static class ProductsInHomepage
+    public enum ProductsInHomepage
     {
-        public static Dictionary<string, string> Products = new Dictionary<string, string>
-        {
-            { "backPAck", "Sauce Labs Backpack" },
-            { "bikeLight", "Sauce Labs Bike Light" },
-            { "boltTshirt", "Sauce Labs Bolt T-Shirt" },
-            { "fleeceJacket", "Sauce Labs Fleece Jacket" },
-            { "onesie", "Sauce Labs Onesie" },
-            { "redTshirt", "Test.allTheThings() T-Shirt (Red)" }
-        };
+        Backpack,
+        BikeLight,
+        BoltTShirt,
+        FleeceJacket,
+        Onesie,
+        RedTShirt        
     }
+
+    public static class ProductsInHomepageExtension
+    {
+        public static string GetProduct(this ProductsInHomepage product)
+        {
+            return product switch
+            {
+                ProductsInHomepage.Backpack => "Sauce Labs Backpack",
+                ProductsInHomepage.BikeLight => "Sauce Labs Bike Light",
+                ProductsInHomepage.BoltTShirt => "Sauce Labs Bolt T-Shirt",
+                ProductsInHomepage.FleeceJacket => "Sauce Labs Fleece Jacket",
+                ProductsInHomepage.Onesie => "Sauce Labs Onesie",
+                ProductsInHomepage.RedTShirt => "Test.allTheThings() T-Shirt (Red)",
+                _ => throw new System.NotImplementedException()
+            };
+        }
+    }
+   
 }
