@@ -1,0 +1,1 @@
+## Usar como terminal Command Prompt (CMD)
