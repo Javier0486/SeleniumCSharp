@@ -3,6 +3,7 @@ using MiProyectoPruebas.Elements;
 using MiProyectoPruebas.Framework;
 using MiProyectoPruebas.Utils;
 using OpenQA.Selenium.Support.UI;
+using System.Linq;
 
 namespace MiProyectoPruebas
 {
@@ -51,13 +52,22 @@ namespace MiProyectoPruebas
 
         public List<string> GetAllProductNamesInHomePage ()
         {
-            List<string> listProducts = new List<string>();
+            // Find all product elements using the locator
             var productElements = Driver.FindElements(SDHomePageElements.elementsInHomePageLocator);
+
+            // "Extract non-empty text values using LINQ for cleaner code
+            List<string> listProducts = productElements
+                .Select(element => element.Text)
+                .Where(text => !string.IsNullOrWhiteSpace(text))
+                .ToList();
+           
+           // Log each product name for debugging purposes
             foreach (var element in productElements)
             {
-                listProducts.Add(element.Text);
-                Logger.LogAction($"{listProducts}");
+                string productText = element.Text;
+                Logger.LogAction($"Product found: {productText}");
             }
+
             return listProducts;
         }
 
@@ -75,10 +85,11 @@ namespace MiProyectoPruebas
             Click(optionLocator);
         }
 
-        public bool verifySortedAtoZ(List<string> listOne, List<string> listTwo)
+        public bool verifySortedAlphabetical(List<string> listOne, List<string> listTwo)
         {
             bool areEqual = listOne.SequenceEqual(listTwo);
             return areEqual;
         }
+
     }
 }
