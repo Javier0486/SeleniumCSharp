@@ -34,7 +34,7 @@ namespace MiProyectoPruebas.Tests
             List<string> products = SDHomePage.GetAllProductNamesInHomePage();
             List<string> sortedItems = products.OrderBy(x => x).ToList();
 
-            bool areEqual = SDHomePage.verifySortedAtoZ(products, sortedItems);
+            bool areEqual = SDHomePage.verifySortedAlphabetical(products, sortedItems);
             Assert.That(areEqual, Is.True);
 
             SDHomePage.LogoutFromSite();
