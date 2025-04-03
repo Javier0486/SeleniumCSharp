@@ -34,7 +34,10 @@ namespace MiProyectoPruebas.Tests
             List<string> products = SDHomePage.GetAllProductNamesInHomePage();
 
             Logger.LogAction("Sorting the list in Descending format...");
-            List<string> productsSorted = products.OrderByDescending(x => x).ToList();
+            List<string> productsSorted = products.Distinct().OrderByDescending(x => x).ToList();
+
+            Logger.LogAction($"List of products: {string.Join(", ", products)}");
+            Logger.LogAction($"List ordered: {string.Join(", ", productsSorted)}");
 
             Logger.LogAction($"Validating {products} is sorted the same way as {productsSorted}");
             bool areEqual = SDHomePage.verifySortedAlphabetical(products, productsSorted);

@@ -34,6 +34,9 @@ namespace MiProyectoPruebas.Tests
             List<string> products = SDHomePage.GetAllProductNamesInHomePage();
             List<string> sortedItems = products.OrderBy(x => x).ToList();
 
+            Logger.LogAction($"List of products: {string.Join(", ",products)}");
+            Logger.LogAction($"List ordered: {string.Join(", ", sortedItems)}");
+
             bool areEqual = SDHomePage.verifySortedAlphabetical(products, sortedItems);
             Assert.That(areEqual, Is.True);
 
