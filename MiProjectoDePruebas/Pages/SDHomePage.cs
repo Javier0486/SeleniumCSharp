@@ -2,6 +2,7 @@ using OpenQA.Selenium;
 using MiProyectoPruebas.Elements;
 using MiProyectoPruebas.Framework;
 using MiProyectoPruebas.Utils;
+using OpenQA.Selenium.Support.UI;
 
 namespace MiProyectoPruebas
 {
@@ -48,11 +49,36 @@ namespace MiProyectoPruebas
             return listPrices;
         }
 
+        public List<string> GetAllProductNamesInHomePage ()
+        {
+            List<string> listProducts = new List<string>();
+            var productElements = Driver.FindElements(SDHomePageElements.elementsInHomePageLocator);
+            foreach (var element in productElements)
+            {
+                listProducts.Add(element.Text);
+                Logger.LogAction($"{listProducts}");
+            }
+            return listProducts;
+        }
+
         public bool LogoutFromSite()
         {
             Click(SDHomePageElements.BurgerMenu);
             Click(SDHomePageElements.LogoutOption);
             return IsElementDisplayed(SDLoginPageElements.UsernameIput);
+        }
+
+        public void selectSort(string sortBy)
+        {
+            Click(SDHomePageElements.SortByLocator);
+            By optionLocator = By.XPath($"//option[text()='{sortBy}']");
+            Click(optionLocator);
+        }
+
+        public bool verifySortedAtoZ(List<string> listOne, List<string> listTwo)
+        {
+            bool areEqual = listOne.SequenceEqual(listTwo);
+            return areEqual;
         }
     }
 }
