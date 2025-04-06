@@ -71,6 +71,25 @@ namespace MiProyectoPruebas
             return listProducts;
         }
 
+        public List<string> GetPriceFromAllProductsInHomePage ()
+        {
+            //Find all product prices using the locator
+            var priceElements = Driver.FindElements(SDHomePageElements.pricesInHomePageLocator);
+
+            List<string> listPrices = priceElements
+                .Select(element => element.Text)
+                .Where(text => !string.IsNullOrWhiteSpace(text))
+                .ToList();
+
+            foreach (var element in priceElements)
+            {
+                string priceText = element.Text;
+                Logger.LogAction($"Price found: {priceText}");
+            }
+
+            return listPrices;
+        }
+
         public bool LogoutFromSite()
         {
             Click(SDHomePageElements.BurgerMenu);
@@ -85,10 +104,28 @@ namespace MiProyectoPruebas
             Click(optionLocator);
         }
 
-        public bool verifySortedAlphabetical(List<string> listOne, List<string> listTwo)
+        public bool verifySorted<T>(IEnumerable<T> listOne, IEnumerable<T> listTwo)
         {
             bool areEqual = listOne.SequenceEqual(listTwo);
             return areEqual;
+        }
+
+        public List<double> convertToNumber (List<string> prices)
+        {
+            List<double> pricesAsDoubles = prices
+                .Select(price => double.Parse(price.Replace("$", "").Replace(",", "").Trim()))
+                .ToList();
+
+            return pricesAsDoubles;
+        }
+
+        public List<double> orderLowToHighPrice (List<double> prices)
+        {
+            List<double> sortedPrices = prices
+                .OrderBy(p => p)
+                .ToList();
+
+            return sortedPrices;
         }
 
     }
