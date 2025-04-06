@@ -10,5 +10,6 @@ namespace MiProyectoPruebas.Elements
         public static By LogoutOption = By.Id("logout_sidebar_link");
         public static By SortByLocator = By.ClassName("product_sort_container");
         public static By elementsInHomePageLocator = By.ClassName("inventory_item_name");
+        public static By pricesInHomePageLocator = By.ClassName("inventory_item_price");
     }
 }

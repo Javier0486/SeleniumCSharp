@@ -40,7 +40,7 @@ namespace MiProyectoPruebas.Tests
             Logger.LogAction($"List ordered: {string.Join(", ", productsSorted)}");
 
             Logger.LogAction($"Validating {products} is sorted the same way as {productsSorted}");
-            bool areEqual = SDHomePage.verifySortedAlphabetical(products, productsSorted);
+            bool areEqual = SDHomePage.verifySorted(products, productsSorted);
             Assert.That(areEqual, Is.True);
 
             Logger.LogAction("Loging out from the site...");
