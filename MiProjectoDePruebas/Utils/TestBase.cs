@@ -10,6 +10,7 @@ namespace MiProyectoPruebas.Utils
     {
         protected IWebDriver driver;
         protected string baseUrl;
+        protected string targetApp;
         protected static ExtentReports extent;
         protected ExtentTest test;
         protected IConfiguration config;
@@ -33,7 +34,8 @@ namespace MiProyectoPruebas.Utils
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
 
-            baseUrl = config["TestSettings:baseUrl"] ?? throw new System.Exception("baseUrl no definido en appsettings.json");
+            targetApp = TestContext.Parameters.Get("TargetSite", "SauceDemo");
+            baseUrl = config[$"BaseUrls:{targetApp}"] ?? throw new System.Exception("SauceDemo baseUrl not found in appsettings.json");
 
             //Asegura que la carpeta Report Exista antes de generar el reporte
             var reportPath = Path.Combine(projectRoot, "Report", "TestReport.html");
@@ -56,12 +58,14 @@ namespace MiProyectoPruebas.Utils
 
                 // taking screenshot if failed
                 string screenshotPath = ScreenshotManager.TakeScreenshot(driver, TestContext.CurrentContext.Test.Name);
-                if (!string.IsNullOrEmpty(screenshotPath))
-                {
-                    test.AddScreenCaptureFromPath(screenshotPath);
-                }
+            if (!string.IsNullOrEmpty(screenshotPath))
+            {
+                test.AddScreenCaptureFromPath(screenshotPath);
+            }
             else
+            {
                 test.Pass("Test Passed");
+            }
 
             try
             {

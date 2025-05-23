@@ -8,53 +8,51 @@ namespace MiProyectoPruebas.Utils
 
         static ConfigReader()
         {
-            try
-            {
-                //Ruta correcta hacia el archivo appsettings.json en la carpeta Config
-                string configPath = Path.Combine(AppContext.BaseDirectory, "Config", "appsettings.json");
+            string configPath = Path.Combine(AppContext.BaseDirectory, "MiProjectoDePruebas", "Config", "appsettings.json");
 
-                if (!File.Exists(configPath))
-                {
-                    throw new FileNotFoundException($"No se encontró el archivo de configuración en {configPath}");
-                }
-
-                //Configuracion del ConfigurationBuilder con la ruta especifica
-                var builder = new ConfigurationBuilder()
-                    .SetBasePath(AppContext.BaseDirectory) //Base es AppContext.BaseDirectory
-                    .AddJsonFile(configPath, optional: false, reloadOnChange: true);
-
-                config = builder.Build();
-            }
-            catch (FileNotFoundException fnfEx)
+            if (!File.Exists(configPath))
             {
-                Logger.LogAction($"{fnfEx.Message}");
-                throw new Exception("Error al cargar appsettings.json. Verifica que el archivo exista y tenga el formato correcto.", fnfEx);
+                throw new FileNotFoundException($"configuration file was no found in {configPath}");
             }
-            catch (Exception ex)
-            {
-                Logger.LogAction($"{ex.Message}");
-                throw new Exception("Error al cargar appsettings.json. Verifica que el archivo tenga el formato correcto.", ex);
-            }
+
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(AppContext.BaseDirectory)
+                .AddJsonFile(configPath, optional: false, reloadOnChange: true);
+
+            config = builder.Build();
         }
 
         // Metodo para obtener la Base URL
-        public static string GetBaseUrl()
+        public static string GetBaseUrl(string targetApp)
         {
-            string baseUrl = config.GetValue<string>("TestSettings:baseUrl");
-            if (string.IsNullOrEmpty(baseUrl))
+            string url = config[$"BaseUrls:{targetApp}"];
+            if (string.IsNullOrEmpty(url))
             {
-                throw new Exception("El valor 'baseUrl' no está definido o está vacío en appsettings.json.");
+                throw new Exception($"Valid URL was not found for the key {targetApp} in BaseUrls");
             }
-            return baseUrl;
+            return url;
+        }
+
+        public static (string USERNAME, string PASSWORD) GetCredentials(string targetApp)
+        {
+            string username = config[$"Credentials:{targetApp}:UserName"];
+            string password = config[$"Credentials:{targetApp}:Password"];
+
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            {
+                throw new Exception($"Credentials not found for the app {targetApp}");
+            }
+
+            return (username, password);
         }
 
         //Metodo generico para obtener valores genericos de configuracion
         public static string GetConfigValue(string key)
         {
-            string value = config.GetValue<string>(key);
+            string value = config[key];
             if (string.IsNullOrEmpty(value))
             {
-                throw new Exception($"El valor '{key}' no está definido o está vacío en appsettings.json.");
+                throw new Exception($"'{key}' value is not defined or is empty in the appsettings.json.");
             }
             return value;
         }

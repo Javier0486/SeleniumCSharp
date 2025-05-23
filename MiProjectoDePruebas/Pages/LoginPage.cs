@@ -1,24 +1,38 @@
 using OpenQA.Selenium;
+using MiProyectoPruebas.Framework;
+using MiProyectoPruebas.config;
+using MiProyectoPruebas.Elements;
+using MiProyectoPruebas.Utils;
 
-namespace MiProyectoPruebas.Pages
+public class LoginPage : BasePage
 {
-    public class LoginPage
+    private readonly By _usernameLocator;
+    private readonly By _passwordLocator;
+    private readonly By _loginButtonLocator;
+    private readonly string _siteKey;
+
+    public LoginPage(IWebDriver driver, string siteKey) : base(driver)
     {
-        private IWebDriver driver;
+        _siteKey = siteKey;
+        var (username, password, loginBtn) = LOCATORS.Map[siteKey];
 
-        //localizadores
-        private By userField = By.Id("username");
-        private By passwordField = By.Id("password");
-        private By loginButton = By.Id("login");
+        // Determine whether to use CssSelector or XPath dynamically
+        _usernameLocator = username.StartsWith("//") ? By.XPath(username) : By.CssSelector(username);
+        _passwordLocator = password.StartsWith("//") ? By.XPath(password) : By.CssSelector(password);
+        _loginButtonLocator = loginBtn.StartsWith("//") ? By.XPath(loginBtn) : By.CssSelector(loginBtn);
+    }
 
-        public LoginPage(IWebDriver driver)
-        {
-            this.driver = driver;
-        }
+    public void Navigate()
+    {
+        string url = ConfigReader.GetBaseUrl(_siteKey);
+        Driver.Navigate().GoToUrl(url);
+    }
 
-        //metodos de accion
-        public void EnterUsername(string username) => driver.FindElement(userField).SendKeys(username);
-        public void EnterPassword(string password) => driver.FindElement(passwordField).SendKeys(password);
-        public void ClickLogin() => driver.FindElement(loginButton).Click();
+    public void Login()
+    {
+        var (username, password) = ConfigReader.GetCredentials(_siteKey);
+        EnterText(_usernameLocator, username);
+        EnterText(_passwordLocator, password);
+        Click(_loginButtonLocator);
     }
 }
