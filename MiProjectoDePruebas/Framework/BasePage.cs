@@ -7,8 +7,8 @@ namespace MiProyectoPruebas.Framework
 {
     public abstract class BasePage
     {
-        protected IWebDriver Driver;
-        protected WebDriverWait Wait;
+        protected readonly IWebDriver Driver;
+        protected readonly WebDriverWait Wait;
 
         protected BasePage(IWebDriver driver)
         {

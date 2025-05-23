@@ -1,27 +1,30 @@
 using NUnit.Framework;
 using MiProyectoPruebas.Utils;
 using MiProyectoPruebas.Pages;
+using MiProyectoPruebas.config;
 using OpenQA.Selenium;
 
 namespace MiProyectoPruebas.Tests
 {
+    [Category("LoginTests")]
     public class LoginTests : TestBase
     {
-        private LoginPage loginPage;
+        private string siteKey;
 
         [SetUp]
         public void BeforeEachTest()
         {
-            loginPage = new LoginPage(driver);
-        }
+            siteKey = targetApp; // targetApp comes from TestBase, and it's "saucedemo"
+         }
 
         [Test]
-        [Ignore("skip test")]
         public void TestLogin()
         {
-            string baseUrl = ConfigReader.GetBaseUrl();
-            driver.Navigate().GoToUrl(baseUrl);
-            Assert.That(driver.Url, Is.EqualTo(baseUrl));
+            var LoginManager = new LoginManager(driver);
+            TestContext.WriteLine($"Logging into site {siteKey}");
+            LoginManager.LoginToApp(siteKey);
+
+            Assert.That(driver.Url, Does.Contain("inventory.html"));
         }
 
     }
