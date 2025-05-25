@@ -1,30 +1,26 @@
 using NUnit.Framework;
 using MiProyectoPruebas.Utils;
 using SwagLabsHomepageEnum.Utils;
+using OpenQA.Selenium.Support.UI;
 
 namespace MiProyectoPruebas.Tests
 {
     public class SDEndToEndTest : TestBase
     {
-        private string username;
-        private string password;
+        private string siteKey;
 
         [SetUp]
         public void TestSetup()
         {
-            driver.Navigate().GoToUrl(baseUrl);
-
-            // load configuration data
-            Logger.LogAction("loading configuration data...");
-            username = config["TestSettings:standardUser"] ?? throw new Exception("standardUser not defined");
-            password = config["TestSettings:password"] ?? throw new Exception("password not defined");
+            siteKey = targetApp;
         }
 
         [Test] 
         public void EndToEndTest()
         {
-            Logger.LogAction("starting end to end test...");
-            SDLoginPage.Login(username, password);
+            var LoginManager = new LoginManager(driver);
+            TestContext.WriteLine($"Login into site {siteKey}");
+            LoginManager.LoginToApp(siteKey);
 
             string[] products = new string[]
             {
