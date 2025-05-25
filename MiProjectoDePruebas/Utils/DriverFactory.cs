@@ -17,9 +17,18 @@ namespace MiProyectoPruebas.Utils
                 new DriverManager().SetUpDriver(new ChromeConfig());
 
                 var options = new ChromeOptions();
-                // we can add here more options if needed: like options.AddArguments("--headless");
+                // Block change password popup
+                options.AddUserProfilePreference("profile.default_content_setting_values.notifications", 2);
+                options.AddUserProfilePreference("profile.default_content_setting_values.popups", 2);
+                options.AddArgument("--password-store=basic");
+                options.AddArgument("--disable-features=PasswordLeakDetection");
+                options.AddUserProfilePreference("credentials_enable_service", false);
+                options.AddUserProfilePreference("profile.password_manager_enabled", false);
+                options.AddArgument("--incognito");
+                options.AddArgument("--disable-save-password-bubble");
+                options.AddArgument("--user-data-dir=/tmp/temporary-chrome-profile");
                 
-                driver = new ChromeDriver();
+                driver = new ChromeDriver(options);
             }
             return driver;
         }
