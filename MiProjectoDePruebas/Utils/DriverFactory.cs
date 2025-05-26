@@ -17,7 +17,7 @@ namespace MiProyectoPruebas.Utils
                 new DriverManager().SetUpDriver(new ChromeConfig());
 
                 var options = new ChromeOptions();
-                // Block change password popup
+                // optioins added to avoid emergent browser windows
                 options.AddUserProfilePreference("profile.default_content_setting_values.notifications", 2);
                 options.AddUserProfilePreference("profile.default_content_setting_values.popups", 2);
                 options.AddArgument("--password-store=basic");
