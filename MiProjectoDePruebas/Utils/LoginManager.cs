@@ -1,6 +1,7 @@
 using OpenQA.Selenium;
 using MiProyectoPruebas.Pages;
 using MiProyectoPruebas.config;
+using MiProyectoPruebas.Utils;
 
 /// Implements Facade Pattern to provide a simplified interface for login operations
 /// across multiple application
@@ -19,5 +20,12 @@ public class LoginManager
         var loginPage = new LoginPage(_driver, siteKey);
         loginPage.Navigate();
         loginPage.Login();
+    }
+
+    public void LoginToAppWithCredentials(string siteKey, string username)
+    {
+        var loginPage = new LoginPage(_driver, siteKey);
+        loginPage.Navigate();
+        loginPage.Login(username);
     }
 }

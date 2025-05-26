@@ -5,30 +5,24 @@ using MiProyectoPruebas.Utils;
 namespace MiProyectoPruebas.Tests
 {
     public class SDLoginBlockedUserTest : TestBase
-    {   
-        private string usernamelocked;
-        private string password;
-        private string username;
+    {
+        private string siteKey;
+        private string lockedUsername;
 
         [SetUp]
         public void TestSetup()
         {
-            driver.Navigate().GoToUrl(baseUrl);
-
-            //values from configuration
-            Logger.LogAction("loading configuration data...");
-            usernamelocked = config["TestSettings:lockOutUser"] ?? throw new Exception("lockOutUser no definido en appsettings.json");
-            password = config["TestSettings:password"] ?? throw new Exception("password not defined");
-            username = config["TestSettings:standardUser"] ?? throw new Exception("standardUser not defined");
+            siteKey = targetApp;
+            lockedUsername = ConfigReader.GetConfigValue("Credentials:SauceDemo:LockOutUser");
         }
 
         [Test]
         public void VerifyLoginFailAnPass()
         {
-
+            var LoginManager = new LoginManager(driver);
             // login locked user
             Logger.LogAction("Starting user locked test...");
-            SDLoginPage.Login(usernamelocked, password);
+            LoginManager.LoginToAppWithCredentials(siteKey, lockedUsername);
             Assert.That(SDLoginPage.VerifyLoginWithLockedOutUser(), Is.True, "locked user message is not displayed");
 
             // clean fields
@@ -37,7 +31,7 @@ namespace MiProyectoPruebas.Tests
             
             // login valid user
             Logger.LogAction("starting valid user test...");
-            SDLoginPage.Login(username, password);
+            LoginManager.LoginToApp(siteKey);
             var header = SDLoginPage.WaitForHeader(SDHomePageElements.SwagLabsHeader);
             Assert.That(header.Displayed, "the SwagLabs header is not displayed after successful login");
         }

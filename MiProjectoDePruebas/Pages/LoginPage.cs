@@ -28,9 +28,13 @@ public class LoginPage : BasePage
         Driver.Navigate().GoToUrl(url);
     }
 
-    public void Login()
+    public void Login(string username = null)
     {
-        var (username, password) = ConfigReader.GetCredentials(_siteKey);
+        string password = ConfigReader.GetConfigValue("Credentials:SauceDemo:Password");
+        if (string.IsNullOrEmpty(username))
+        {
+            username = ConfigReader.GetConfigValue("Credentials:SauceDemo:UserName");
+        }
         EnterText(_usernameLocator, username);
         EnterText(_passwordLocator, password);
         Click(_loginButtonLocator);
