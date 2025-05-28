@@ -6,6 +6,12 @@ using MiProyectoPruebas.Utils;
 
 namespace MiProyectoPruebas.Utils
 {
+    /** Dependency Inversion Principle (DIP)
+        Depends on abstractions, not on concretions.
+        Uses abstraction for setup/teardown.
+        The classes use the IWebDriver interface, allowing to swap out the actual driver implementation if needed.
+        Makes the code flexible and stable by relying on interfaces (IWebDriver).
+    */
     public class TestBase
     {
         protected IWebDriver driver;
@@ -56,8 +62,8 @@ namespace MiProyectoPruebas.Utils
             if (TestContext.CurrentContext.Result.Outcome.Status == NUnit.Framework.Interfaces.TestStatus.Failed)
                 test.Fail("Test Failed");
 
-                // taking screenshot if failed
-                string screenshotPath = ScreenshotManager.TakeScreenshot(driver, TestContext.CurrentContext.Test.Name);
+            // taking screenshot if failed
+            string screenshotPath = ScreenshotManager.TakeScreenshot(driver, TestContext.CurrentContext.Test.Name);
             if (!string.IsNullOrEmpty(screenshotPath))
             {
                 test.AddScreenCaptureFromPath(screenshotPath);
@@ -83,11 +89,11 @@ namespace MiProyectoPruebas.Utils
         public void OneTimeTearDown()
         {
             TestContext.Progress.WriteLine("Finalizando pruebas...");
-            
+
             if (extent != null)
             {
                 extent.Flush();
-            }   
+            }
             else
             {
                 TestContext.Progress.WriteLine("Error: ExtentReports was not initialized");

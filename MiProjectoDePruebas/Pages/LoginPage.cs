@@ -4,7 +4,18 @@ using MiProyectoPruebas.config;
 using MiProyectoPruebas.Elements;
 using MiProyectoPruebas.Utils;
 
-public class LoginPage : BasePage
+/** Single Responsibility Principle (SRP)
+    each class should have only one reason to change
+    Handles all actions and interactions specific to the login page. Uses locators and configuration to perform login-related tasks.
+    Implements the Single Responsibility principle by focusing only on login page logic.
+    keeps code maintainable and easy to understand. Each class has a clear purpose.
+
+    Interface Segregation Principle (ISP)
+    Clients should not be forced to depend on interfaces they do not use
+    Implements only the interfaces it needs (e.g. IClickable, ITextEntry), so it is not forced to depend on methods it doesn't use.
+    It works by defining small interfaces and having each class implement only what it needs, avoiding "fat" interfaces and unnecessary dependencies.
+*/
+public class LoginPage : BasePage, ITextEntry, IClickable
 {
     private readonly By _usernameLocator;
     private readonly By _passwordLocator;

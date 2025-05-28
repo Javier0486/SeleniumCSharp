@@ -5,7 +5,29 @@ using MiProyectoPruebas.Utils;
 
 namespace MiProyectoPruebas.Framework
 {
-    public abstract class BasePage
+    /** Single Responsibility Principle (SRP)
+    Each class should have only one reason to change
+    Handles common web page actions and utilities that are shared across all page objects (e.g. methods for entering text, clicking elements, waiting for elements).
+    Provides a foudation for all other page classes to inherit common functionality, reducing code duplication
+    keeps code maintainable and easy to understand. Each class has a clear purpose.
+
+    Open/Close Principle (OCP)
+    Classes should be open for extension, but close for modification
+    Can be extended by other page classes without modifying the base.
+    New features can be added (like new pages or browsers) without changing existing code.
+
+    Liskov Substitution Principle (LSP)
+    Derived classes must be substitutable for their base classes
+    Any class inheriting from BasePage can be used wherever a BasePage is expected, ensuring correct behavior.
+    Ensures that all page objects can be used interchangeably if they inherit from BasePage.
+
+    Interface Segregation Principle (ISP)
+    Clients should not be forced to depend on interfaces they do not use
+    Implements the interfaces (IClickable, ITextEntry) and provides public methods for those actions.
+    Any page class that inherits from BasePage and needs those actions can use them
+    It works by defining small interfaces and having each class implement only what it needs, avoiding "fat" interfaces and unnecessary dependencies.
+*/
+    public abstract class BasePage : IClickable, ITextEntry
     {
         protected readonly IWebDriver Driver;
         protected readonly WebDriverWait Wait;
@@ -22,13 +44,13 @@ namespace MiProyectoPruebas.Framework
             return Wait.Until(ExpectedConditions.ElementIsVisible(locator));
         }
 
-        protected void Click(By locator)
+        public void Click(By locator)
         {
             Logger.LogAction($"Clicking the element with locator: {locator}");
             FindElement(locator).Click();
         }
 
-        protected void EnterText(By locator, string text)
+        public void EnterText(By locator, string text)
         {
             Logger.LogAction($"Sending text '{text} to the element with locator: {locator}");
             var element = FindElement(locator);

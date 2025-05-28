@@ -23,13 +23,13 @@
 +-------------------+         +-------------------+
           |                            |
           v                            v
-+-------------------+         +-------------------+
-|   LoginTest.cs    |-------->|  LoginPage.cs     |
-+-------------------+         +-------------------+
-          |                            ^
-          v                            |
-+-------------------+                  |
-| LoginManager.cs   |------------------+
++-------------------+         +-------------------+         +---------------------+
+|   LoginTest.cs    |-------->|  LoginPage.cs     |<--------|   IPageActions.cs   |
++-------------------+         +-------------------+         +---------------------+
+          |                            ^                              ^
+          v                            |                              |
++-------------------+                  |                              |
+| LoginManager.cs   |------------------+------------------------------+
 +-------------------+
 ```
 
@@ -42,9 +42,31 @@
 - **TestBase.cs**: Sets up and tears down tests.
 - **Locators.cs**: Stores selectors for web elements.
 - **BasePage.cs**: Common web page actions.
-- **LoginPage.cs**: Actions for the login page.
+- **IPageActions.cs**: Defines interfaces for page actions (e.g., IClickable, ITextEntry) to support Interface Segregation Principle.
+- **LoginPage.cs**: Implements page actions interfaces and handles login page logic.
 - **LoginManager.cs**: Handles full login process.
 - **LoginTest.cs**: Where tests are written.
+
+---
+
+## Process Flow
+
+1. **Test Initialization**
+   - `TestBase.cs` sets up the browser using `DriverFactory.cs`.
+   - `ConfigReader.cs` loads configuration from `appsettings.json`.
+
+2. **Test Execution**
+   - `LoginTest.cs` starts the test and uses `LoginManager.cs` to perform login.
+   - `LoginManager.cs` uses `LoginPage.cs` (which implements interfaces from `IPageActions.cs`) to interact with the login page.
+   - `LoginPage.cs` uses locators from `Locators.cs` and common actions from `BasePage.cs`.
+
+3. **Test Actions**
+   - Page actions (like click, enter text) are defined in interfaces (`IPageActions.cs`) and implemented by page classes as needed, following the Interface Segregation Principle.
+
+4. **Test Completion**
+   - `TestBase.cs` handles cleanup and browser closure.
+
+---
 
 # appsettings.json
 ### A file to write down things the test need, like website addresses, usernames, and passwords; so no need to write these details in the code, just chabge them here if needed.
@@ -91,3 +113,10 @@
 ## * You have special classes to read those settings, open browsers, and find things on web pages.
 ## * You write your tests in one pleace, and all the setup/cleanup is handled for you.
 ## * If something changes (like password or a button), you only update it in one pleace
+### SOLID principles implementation
+## * SRP: Keeps code maintainable and easy to understand. Each class had a clear purpose.
+## * OCP: You can add new features (like new pages or browsers) without changing existing code.
+## * LSP: Ensures that all page objects can be used interchangeably if they inherit from BasePage.
+## * ISP: Each page class only implements the small, specific interfaces for the actions it needs (like clicking or entering text),
+##   so no class is forced to depend on methods it doesn't use.
+## * DIP: Makes your code flexible and testable by relying on interfaces (IWebDriver)

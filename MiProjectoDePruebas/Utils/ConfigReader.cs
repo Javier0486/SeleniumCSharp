@@ -2,6 +2,11 @@ using Microsoft.Extensions.Configuration;
 
 namespace MiProyectoPruebas.Utils
 {
+    /** Single Responsibility Principle (SRP)
+        each class should have only one reason to change
+        ConfigReader class handles reading configuration values
+        keeps code maintainable and easy to understand. Each class has a clear purpose.
+    */
     public static class ConfigReader
     {
         private static readonly IConfigurationRoot config;
